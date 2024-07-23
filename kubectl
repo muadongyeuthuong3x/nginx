@@ -1,0 +1,38 @@
+kubectl get pods
+
+------------get all pos
+
+ kubectl run app1 --image=vietaws/eks:v1
+ //create app1 voi image dockerhub is vietaws/eks:v1
+
+  kubectl get pods --watch
+  // xem tien trinh dowload 
+
+   kubectl run app2 --image=vietaws/eks:v1 --image-pull-policy=Always
+
+   luon luon keo anh tu dockerhub ve
+
+
+   kubectl get services (svc)
+   // get information swrveis
+
+
+   kubectl descrive svc name_servies
+//
+
+   kubectl expose --help
+
+
+    kubectl expose pods app2 --port=8081 --target-port=8080 --name=servies1 --type=NodePort
+
+     // expose pod voi port app = 8081
+     // use pods use 8080
+     // name expose 
+     // type NodePort or Balancer
+
+      kubectl get nodes
+      // get nodes
+
+
+      kubectl get nodes -o wide
+      // get all information node

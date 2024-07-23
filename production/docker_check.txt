@@ -1,0 +1,36 @@
+docker-compose down clear container docker-compose 
+
+ docker-compose up --build -d build docker-compose and buld dockerfile
+
+ docker-compose -f de use cac docker.yml khac docker-compose default
+
+
+push docker remote 
+B1  docker tag project-name1-nest_api manhcuong1234/docker_image_remote      
+// tag is image local 
+// manhcuong1234/docker_image_remote   repositories remote
+B2   docker push manhcuong1234/docker_image_remote
+// push image local from remote
+ 
+
+play load docker sẽ tao một image timestamp
+
+
+// 
+docker system df -v
+kiem tra dung luong volunne
+
+
+https://cdn.fs.teachablecdn.com/GCjUtS2xQLGMd0K97j9Y
+
+
+docker compose -p docker_test up -d
+
+-p dat ten docker 
+up build
+-d chay ngam
+
+
+ docker build --tag node-docker
+
+ build dockerfile va dat ten tag image is node-docker

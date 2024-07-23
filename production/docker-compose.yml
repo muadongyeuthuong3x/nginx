@@ -1,0 +1,83 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: testmigrate2
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  nest_api:
+    build:
+      context: ../project-name1
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '8080:8080'
+    expose:
+      - 8080
+    environment:
+      NODE_ENV: development
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: testmigrate2 
+    volumes:
+      - ../project-name1:/home/node/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  client:
+    stdin_open: true
+    environment:
+      CHOKIDAR_USEPOLLING: 'true'
+    build:
+      context: ../my-app
+      dockerfile: Dockerfile
+    volumes:
+      - ../my-app:/home/node/app
+
+  nginx:
+    depends_on:
+      - nest_api
+      - client
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:80"
+
+  # migrate:
+  #   build:
+  #     context: ../project-name1
+  #     dockerfile: Dockerfile
+  #   command: npm run migration:run
+  #   environment:
+  #     NODE_ENV: development
+  #     DATABASE_HOST: db
+  #     DATABASE_PORT: 5432
+  #     DATABASE_USERNAME: postgres
+  #     DATABASE_PASSWORD: postgres
+  #     DATABASE_NAME: testmigrate2
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ../project-name1:/home/node/app
+
+volumes:
+  postgres_data:
